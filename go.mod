@@ -1,4 +1,4 @@
-module github.com/MaxTech/cache
+module github.com/maxtech/cache
 
 go 1.12
 
