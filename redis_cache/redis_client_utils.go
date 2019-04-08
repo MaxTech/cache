@@ -21,6 +21,16 @@ func (ru *redisClientUtils) InitRedisClient(address string, password string, dbN
     return redisClient
 }
 
+func (ru *redisClientUtils) InitRedisClientByConfig(redisConfig RedisConfigFormat) *redis.Client {
+    redisClient := redis.NewClient(&redis.Options{
+        Addr:        redisConfig.Address,
+        Password:    redisConfig.Password, // no password set
+        DB:          redisConfig.DBNum,    // use default DB
+        DialTimeout: time.Second * 2,
+    })
+    return redisClient
+}
+
 func (ru *redisClientUtils) CheckRedisClient(redisClient *redis.Client) bool {
     _, err := redisClient.Ping().Result()
     if err != nil {
