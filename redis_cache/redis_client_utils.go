@@ -1,8 +1,9 @@
 package redis_cache
 
 import (
+    "fmt"
     "github.com/go-redis/redis"
-    "log"
+    "os"
     "time"
 )
 
@@ -11,30 +12,30 @@ type redisClientUtils struct {
 
 var RedisClientUtils *redisClientUtils
 
-func (ru *redisClientUtils) InitRedisClient(address string, password string, dbNum int) *redis.Client {
+func (rcu *redisClientUtils) InitRedisClient(_address string, _password string, _dbNum int) *redis.Client {
     redisClient := redis.NewClient(&redis.Options{
-        Addr:        address,
-        Password:    password, // no password set
-        DB:          dbNum,    // use default DB
+        Addr:        _address,
+        Password:    _password, // no password set
+        DB:          _dbNum,    // use default DB
         DialTimeout: time.Second * 2,
     })
     return redisClient
 }
 
-func (ru *redisClientUtils) InitRedisClientByConfig(redisConfig RedisConfigFormat) *redis.Client {
+func (rcu *redisClientUtils) InitRedisClientByConfig(_redisConfig RedisConfigFormat) *redis.Client {
     redisClient := redis.NewClient(&redis.Options{
-        Addr:        redisConfig.Address,
-        Password:    redisConfig.Password, // no password set
-        DB:          redisConfig.DBNum,    // use default DB
+        Addr:        _redisConfig.Address,
+        Password:    _redisConfig.Password, // no password set
+        DB:          _redisConfig.DBNum,    // use default DB
         DialTimeout: time.Second * 2,
     })
     return redisClient
 }
 
-func (ru *redisClientUtils) CheckRedisClient(redisClient *redis.Client) bool {
-    _, err := redisClient.Ping().Result()
+func (rcu *redisClientUtils) CheckRedisClient(_redisClient *redis.Client) bool {
+    _, err := _redisClient.Ping().Result()
     if err != nil {
-        log.Println("redis connect error:", err)
+        _, _ = fmt.Fprintln(os.Stderr, time.Now().Format(time.RFC3339Nano), "[Error]", "redis connect error:", err)
         return false
     }
     return true
